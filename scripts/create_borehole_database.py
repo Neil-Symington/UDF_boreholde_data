@@ -1,4 +1,3 @@
-from os import stat
 import geopandas as gpd
 import pandas as pd
 import shapely
@@ -64,7 +63,7 @@ def load_and_process_table(infile):
 
 
 # paths to files
-infile = r"..\data\UDF_Bore.csv"
+infile = r"..\staging_data\UDF_Bore_staging.csv"
 
 dem_path = r"E:\GA\UDF\data\elevation\UDF_DEM_gda94.tif"
 
@@ -215,18 +214,22 @@ schema = {'properties': OrderedDict([('BoreName', 'str:200'), ('HydroID', 'int')
 
 cols = [c for c in schema['properties']] + ['geometry']
 
-UDF_file = r"E:\GA\UDF\compilation\UDF_Boreholes.gpkg"
+UDF_file = r"..\output\UDF_Boreholes.gpkg"
+
+# now export csv
+
+gdf[cols].to_csv(r"..\output\UDF_Bore.csv", index = False)
 
 gdf[cols].to_file(UDF_file, layer='UDF_Bores', driver="GPKG", schema = schema)
 #gdf[cols].to_file("UDF_Boreholes.gdf", driver="FileGDB", schema = schema)
 
 # Now bring in the other tables
-borelog_file = r"..\UDF_BoreLog.csv"
+borelog_file = r"..\staging_data\UDF_BoreLog_staging.csv"
 
 gdf_borelogs = load_and_process_table(borelog_file)
 
 bl_schema = {'properties': OrderedDict([('BoreID', 'int'), ('HydroCode', 'str:30'), ('FromDepth', 'float'), ('ToDepth', 'float'),
-                                        ('TopElev', 'float'), ('BottomElev', 'float'), ('HGUID', 'int'), 
+                                       ('TopElev', 'float'), ('BottomElev', 'float'), ('HGUID', 'int'),
                                         ('HGUNumber', 'int'), ('NafHGUNumber', 'int'), 
                                         ('NafHGUName', 'str:255'), ('Description', 'str:255'), 
                                         ('Author', 'str:50'), ('Source', 'str:100'), ('Comment', 'str:250'),
@@ -236,9 +239,12 @@ bl_schema = {'properties': OrderedDict([('BoreID', 'int'), ('HydroCode', 'str:30
 bl_cols = [c for c in bl_schema['properties']] + ['geometry']
 gdf_borelogs[bl_cols].to_file(UDF_file, layer='UDF_Borelog', driver="GPKG", schema = bl_schema)
 
+gdf_borelogs[bl_cols].to_csv(r"..\output\UDF_BoreLog.csv", index = False)
+
 # To write to a geopackage, the dataframe needs to first be written as a geodataframe
 
-lithlog_file = r"..\UDF_LithLog.csv"
+lithlog_file = r"..\staging_data\UDF_LithLog_staging.csv"
+
 gdf_lithlog = load_and_process_table(lithlog_file)
 
 ll_schema = {'properties': OrderedDict([('BoreID', 'int'), ('HydroCode', 'str:30'), ('FromDepth', 'float'), ('ToDepth', 'float'),
@@ -250,8 +256,11 @@ ll_schema = {'properties': OrderedDict([('BoreID', 'int'), ('HydroCode', 'str:30
 ll_cols = [c for c in ll_schema['properties']] + ['geometry']
 gdf_lithlog[ll_cols].to_file(UDF_file, layer='UDF_LithologyLog', driver="GPKG", schema = ll_schema)
 
-constructionlog_file = r"..\UDF_ConstructionLog.csv"
+gdf_lithlog[ll_cols].to_csv(r"..\output\UDF_LithLog.csv", index = False)
+
+constructionlog_file = r"..\staging_data\UDF_ConstructionLog_staging.csv"
 gdf_constrlog = load_and_process_table(constructionlog_file)
+
 
 cl_schema = {'properties': OrderedDict([('BoreID', 'int'), ('HydroCode', 'str:30'), ('FromDepth', 'float'), ('ToDepth', 'float'),
                                         ('TopElev', 'float'), ('BottomElev', 'float'),
@@ -260,6 +269,9 @@ cl_schema = {'properties': OrderedDict([('BoreID', 'int'), ('HydroCode', 'str:30
                                         ]), 'geometry': 'None'}
 
 cl_cols = [c for c in cl_schema['properties']] + ['geometry']
+
+gdf_constrlog[cl_cols].to_csv(r"..\output\UDF_ConstructionLog.csv", index = False)
+
 gdf_constrlog[cl_cols].to_file(UDF_file, layer='UDF_ConstructionLog', driver="GPKG", schema = cl_schema)
 
 # now we add the conductivity data
