@@ -25,9 +25,9 @@ def check_table_validity(df, gdf):
     # check table validity, add more checks as they come to mind
     assert np.all(np.isin(df['BoreID'].values, gdf['HydroID'].values))
 
-def load_and_process_table(infile, table):
+def load_and_process_table(infile):
     # adjust each hole so it is relative to groundlevel
-    df  = pd.read_excel(infile, engine = "openpyxl", sheet_name = table)
+    df  = pd.read_csv(infile)
 
     df = df.merge(gdf[['HydroID', 'HydroCode','RefElev', 'RefElevDesc', 'GALandElev', 'geometry']],
                   left_on=['BoreID', 'HydroCode'], right_on = ['HydroID', 'HydroCode'],
@@ -64,11 +64,11 @@ def load_and_process_table(infile, table):
 
 
 # paths to files
-infile = r"..\data\UDF_bore_loading.xlsx"
+infile = r"..\data\UDF_Bore.csv"
 
 dem_path = r"E:\GA\UDF\data\elevation\UDF_DEM_gda94.tif"
 
-df = pd.read_excel(infile, engine = "openpyxl", sheet_name = 'UDF_Bore')
+df = pd.read_csv(infile)
 
 # drop any creepy nan rows
 df.dropna(how='all', inplace=True)
@@ -221,8 +221,9 @@ gdf[cols].to_file(UDF_file, layer='UDF_Bores', driver="GPKG", schema = schema)
 #gdf[cols].to_file("UDF_Boreholes.gdf", driver="FileGDB", schema = schema)
 
 # Now bring in the other tables
+borelog_file = r"..\UDF_BoreLog.csv"
 
-gdf_borelogs = load_and_process_table(infile, 'UDF_BoreLog')
+gdf_borelogs = load_and_process_table(borelog_file)
 
 bl_schema = {'properties': OrderedDict([('BoreID', 'int'), ('HydroCode', 'str:30'), ('FromDepth', 'float'), ('ToDepth', 'float'),
                                         ('TopElev', 'float'), ('BottomElev', 'float'), ('HGUID', 'int'), 
@@ -237,7 +238,8 @@ gdf_borelogs[bl_cols].to_file(UDF_file, layer='UDF_Borelog', driver="GPKG", sche
 
 # To write to a geopackage, the dataframe needs to first be written as a geodataframe
 
-gdf_lithlog = load_and_process_table(infile, 'UDF_LithologyLog')
+lithlog_file = r"..\UDF_LithLog.csv"
+gdf_lithlog = load_and_process_table(lithlog_file)
 
 ll_schema = {'properties': OrderedDict([('BoreID', 'int'), ('HydroCode', 'str:30'), ('FromDepth', 'float'), ('ToDepth', 'float'),
                                         ('TopElev', 'float'), ('BottomElev', 'float'), ('GALithType', 'str:50'), ('MajorLithCode', 'str:50'),
@@ -248,7 +250,8 @@ ll_schema = {'properties': OrderedDict([('BoreID', 'int'), ('HydroCode', 'str:30
 ll_cols = [c for c in ll_schema['properties']] + ['geometry']
 gdf_lithlog[ll_cols].to_file(UDF_file, layer='UDF_LithologyLog', driver="GPKG", schema = ll_schema)
 
-gdf_constrlog = load_and_process_table(infile, 'UDF_ConstructionLog')
+constructionlog_file = r"..\UDF_ConstructionLog.csv"
+gdf_constrlog = load_and_process_table(constructionlog_file)
 
 cl_schema = {'properties': OrderedDict([('BoreID', 'int'), ('HydroCode', 'str:30'), ('FromDepth', 'float'), ('ToDepth', 'float'),
                                         ('TopElev', 'float'), ('BottomElev', 'float'),
@@ -294,7 +297,6 @@ for i in range(1,31):
     cond_schema['properties'][layer] = 'float'
 
 cond_cols = [c for c in cond_schema['properties']] + ['geometry']
-print(cond_cols)
 
 gdf_cond_ss.rename(columns = {'HydroID':"BoreID"}, inplace = True)
 
