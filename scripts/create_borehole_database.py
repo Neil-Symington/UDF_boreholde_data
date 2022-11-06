@@ -64,7 +64,7 @@ def load_and_process_table(infile, table):
 
 
 # paths to files
-infile = r"E:\GA\UDF\compilation\staging\UDF_bore_loading.xlsx"
+infile = r"..\data\UDF_bore_loading.xlsx"
 
 dem_path = r"E:\GA\UDF\data\elevation\UDF_DEM_gda94.tif"
 
