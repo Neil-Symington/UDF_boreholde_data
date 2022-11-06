@@ -209,7 +209,7 @@ schema = {'properties': OrderedDict([('BoreName', 'str:200'), ('HydroID', 'int')
           ('RefElev', 'float'), ('RefElevDesc', 'str:30'), ('RefElevMethod', 'str:30'),
          ('FTypeClass', 'str:50'), ('ConstructionLog', 'int'), ('LithLog', 'int'), ('HydrostratLog', 'int'),
           ('WaterLevel', 'int'), ('Salinity', 'int'),
-          ('AddedBy', 'str:20'), ('Comment', 'str:100'), ('Source', 'str:20'), ("QAQCd_By", 'str:20'), ('QAQC_date', 'datetime')]),
+          ('AddedBy', 'str:20'), ('Comment', 'str:100'), ('Source', 'str:20'), ("QAQCd_By", 'str:20'), ('QAQC_date', 'date')]),
            'geometry': 'Point'}
 
 cols = [c for c in schema['properties']] + ['geometry']
