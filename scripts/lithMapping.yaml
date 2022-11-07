@@ -2,9 +2,10 @@ lithologyMapping:
     unk: ["unkn","", "(none)", "basement", "bdrk", "bedrock", "comment", "drilling", "mica", "mqtz", "multi",
           "multiple","nan", "rock","soapy head", "stairway", "mereenie", "stokes", "horn valley", "ston", "stone",
           "unk", "xxxx", "aglr", "alvm", "aqfr", "base", "bdlr", "bsmt", "clvm", "cmnt", "cement", "drft", "fill"]
-    acid igneous rock  : ["adml", "madm","volcanics"]
+    acid igneous rock  : ["adml", "madm", "porphyry"]
     alluvial sediment  : ["alluvials", "alluvium", "allv"]
     amphibolite  : []
+    andesite: []
     anorthosite  : ["anrt"]
     basalt  : ["bluestone", "bslt", "glss"]
     basic igneous rock  : []
@@ -12,7 +13,7 @@ lithologyMapping:
     boulders  : ["bldr"]
     breccia  : ["brec","rubble"]
     calcrete  : ["caar", "calc", "calcite", "calcrite", "clcn", "clcr"]
-    carbonate rock  : ["cbrk"]
+    carbonate rock  : ["cbrk", "packstone"
     chalcedony  : ["chal"]
     chalk: ["chlk"]
     chert  : ["chrt"]
@@ -64,7 +65,7 @@ lithologyMapping:
     quartz rock  : ["quar", "quartz", "qrtz"]
     quartzite  : ["meta", "qtzt", "quatrzite", "qrtt"]
     sand  : ["coarse sand", "sands", "fsnd", "samd"]
-    sand, eolian  : []
+    sand eolian  : []
     sandstone  : ["arenite", "grit", "sandfstone", "sandsotne", "sanstone","sdst", "sdsn", "grck"]
     sandy clay  : ["sandy clays", "sclm", "sdcy"]
     sandy shale: ["sandy shale", "sash"]
@@ -87,3 +88,4 @@ lithologyMapping:
     talc: []
     ultramafic igneous rock  : []
     vein  : []
+    volcaniclastic rock: ["agglomerate"]
