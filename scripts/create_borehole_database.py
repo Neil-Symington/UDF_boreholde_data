@@ -25,6 +25,7 @@ def check_table_validity(df, gdf):
     assert np.all(np.isin(df['BoreID'].values, gdf['HydroID'].values))
 
 def load_and_process_table(infile):
+    print(infile)
     # adjust each hole so it is relative to groundlevel
     df  = pd.read_csv(infile)
 
@@ -43,8 +44,8 @@ def load_and_process_table(infile):
             df.at[index, 'FromDepth'] = row.FromDepth - row.offset
             df.at[index, 'ToDepth'] = row.ToDepth - row.offset
         else:
+            print(row)
             print("Please fill in the reference elevation for bore {}".format(row.HydroCode))
-            break
     df['FromDepth'] = df['FromDepth'].round(2)
     df['FromDepth'] = df['FromDepth'].round(2)
 
